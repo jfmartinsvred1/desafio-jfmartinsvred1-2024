@@ -37,5 +37,38 @@ describe('Recintos do Zoologico', () => {
         expect(resultado.recintosViaveis.length).toBe(3);
     });
 
+    test('Verifica se animais carnívoros vão habitar somente com a própria espécie',()=>{
+        const resultado = new RecintosZoo().analisaRecintos('leao',1);
+        const resultado2 = new RecintosZoo().analisaRecintos('leopardo',1);
+
+
+        expect(resultado.erro).toBeFalsy();
+        expect(resultado.recintosViaveis[0]).toBe('Recinto 5 (espaço livre: 3 total: 9)')
+
+
+        expect(resultado2.erro).toBe("Não há recinto viável");
+        expect(resultado2.recintosViaveis).toBe(false)
+    })
+    test('Hipopótamo(s) só tolera(m) outras espécies estando num recinto com savana e rio',()=>{
+        const resultado = new RecintosZoo().analisaRecintos('hipopotamo',1);
+
+        expect(resultado.erro).toBeFalsy();
+        expect(resultado.recintosViaveis[0]).toBe('Recinto 3 (espaço livre: 0 total: 7)')
+        expect(resultado.recintosViaveis[1]).toBe('Recinto 4 (espaço livre: 4 total: 8)')
+    })
+
+    test('Deve Adicionar 2 hipopotamos',()=>{
+        const resultado = new RecintosZoo().analisaRecintos('hipopotamo',2);
+        expect(resultado.recintosViaveis[0]).toBe('Recinto 4 (espaço livre: 0 total: 8)')
+    })
+
+    test('Adicionar apenas 1 macaco, não deve ficar em recinto sozinho',()=>{
+        const resultado = new RecintosZoo().analisaRecintos('MACACO', 1);
+        expect(resultado.erro).toBeFalsy();
+        expect(resultado.recintosViaveis[0]).toBe('Recinto 1 (espaço livre: 6 total: 10)');
+        expect(resultado.recintosViaveis[1]).toBe('Recinto 3 (espaço livre: 3 total: 7)');
+        expect(resultado.recintosViaveis.length).toBe(2);
+    })
+
 });
 
